@@ -6,9 +6,10 @@ is labelled by a unit direction vector `(sin Dec, cos Dec sin RA, cos Dec cos RA
 we ask how linearly decodable that direction is from a model's residual stream.
 
 This repository currently contains the **feature-extraction** step: for a chosen model,
-it records the top-128 PCA components of the last-token residual stream (per layer),
-in pure autocomplete mode, over a grid of location-style prompts × objects. The compact
-per-model `.npz` files it produces are the input to the downstream probing / LDA analyses.
+it records the top-K PCA components of the last-token residual stream (per layer, K set
+with `--npca`, default 128), in pure autocomplete mode, over a grid of location-style
+prompts × objects. The compact per-model `.npz` files it produces are the input to the
+downstream probing / LDA analyses.
 
 ## Install
 
@@ -24,6 +25,9 @@ pip install "kernels>=0.12,<0.13"
 # a model from the built-in registry
 python extract_pca.py --model qwen32b
 
+# choose how many PCA components to keep (default 128)
+python extract_pca.py --model qwen32b --npca 64
+
 # multi-GPU sharding for large models
 CUDA_VISIBLE_DEVICES=0,1 python extract_pca.py --model mistrallarge --batch 16
 
@@ -31,11 +35,11 @@ CUDA_VISIBLE_DEVICES=0,1 python extract_pca.py --model mistrallarge --batch 16
 python extract_pca.py --hf-repo some/other-model --name mymodel
 ```
 
-Output: `pca128/<name>_pca128.npz` containing
+Output: `pca/<name>_pca<K>.npz` (where `K` is `--npca`) containing
 
 | key | shape | meaning |
 |---|---|---|
-| `pca` | `(n_samples, n_layers+1, 128)` | top-128 PCA of the standardized residual stream, per layer |
+| `pca` | `(n_samples, n_layers+1, K)` | top-K PCA of the standardized residual stream, per layer |
 | `obj_ids` | `(n_samples,)` | index into `names` for each sample |
 | `pr_ids` | `(n_samples,)` | prompt-template index for each sample |
 | `Yunit` | `(n_objects, 3)` | unit sky-direction of each object |

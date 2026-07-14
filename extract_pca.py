@@ -4,13 +4,15 @@ Decodable Sky -- residual-stream PCA extractor.
 
 For a chosen causal LLM, run every (location-prompt x astronomical-object) string
 through the model in pure autocomplete mode (no chat template), grab the last-token
-residual stream at every layer, and keep the top-128 PCA components per layer.
-The result is one compact .npz per model that later probing / LDA analyses read.
+residual stream at every layer, and keep the top-K PCA components per layer
+(K is set with --npca, default 128). The result is one compact .npz per model that
+later probing / LDA analyses read.
 
 Usage
 -----
     python extract_pca.py --model qwen32b
-    python extract_pca.py --model llama70b --out pca128 --batch 32
+    python extract_pca.py --model qwen32b --npca 64
+    python extract_pca.py --model llama70b --out pca --batch 32
     python extract_pca.py --hf-repo some/other-model --name mymodel   # any HF causal LM
 
 Requirements
@@ -20,9 +22,9 @@ Requirements
   * Multi-GPU: export CUDA_VISIBLE_DEVICES=0,1,...  -- weights are sharded with
     device_map="auto"; the residual stream is read the same way regardless of sharding.
 
-Output (<out>/<name>_pca128.npz)
+Output (<out>/<name>_pca<K>.npz)
 --------------------------------
-    pca      float16 (n_samples, n_layers+1, 128)  -- top-128 PCA of the standardized
+    pca      float16 (n_samples, n_layers+1, K)    -- top-K PCA of the standardized
                                                       residual stream, per layer
     obj_ids  int     (n_samples,)  index into `names` for each sample
     pr_ids   int     (n_samples,)  index of the prompt template for each sample
@@ -47,7 +49,6 @@ MODELS = {
     "mistrallarge": "mistralai/Mistral-Large-Instruct-2411",
     "glm45air":     "zai-org/GLM-4.5-Air",
 }
-NPCA = 128
 
 
 def load_objects(path):
@@ -77,7 +78,8 @@ def main():
     ap.add_argument("--name", help="output prefix (defaults to the model key / repo name)")
     ap.add_argument("--prompts", default="data/astro_prompts_location.csv")
     ap.add_argument("--objects", default="data/astro_objects.csv")
-    ap.add_argument("--out", default="pca128", help="output directory")
+    ap.add_argument("--out", default="pca", help="output directory")
+    ap.add_argument("--npca", type=int, default=128, help="number of top PCA components to keep")
     ap.add_argument("--batch", type=int, default=32)
     ap.add_argument("--max-len", type=int, default=64)
     ap.add_argument("--max-memory-gib", type=int, default=None,
@@ -86,6 +88,8 @@ def main():
 
     if not args.hf_repo and not args.model:
         ap.error("choose a model with --model <key> or --hf-repo <repo>")
+    if args.npca < 1:
+        ap.error("--npca must be >= 1")
     repo = args.hf_repo or MODELS[args.model]
     name = args.name or args.model or repo.split("/")[-1]
     os.makedirs(args.out, exist_ok=True)
@@ -139,15 +143,15 @@ def main():
     del model
     if torch.cuda.is_available():
         torch.cuda.empty_cache()
-    print("computing PCA per layer ...", flush=True)
-    pca = np.zeros((n, n_layers, NPCA), np.float16)
+    npca = min(args.npca, hidden, n - 1)
+    print(f"computing top-{npca} PCA per layer ...", flush=True)
+    pca = np.zeros((n, n_layers, npca), np.float16)
     for li in range(n_layers):
         x = acts[:, li, :].astype(np.float32)
         x = (x - x.mean(0)) / (x.std(0) + 1e-6)          # standardize features
-        k = min(NPCA, x.shape[1], x.shape[0] - 1)
-        pca[:, li, :k] = PCA(n_components=k, random_state=0).fit_transform(x).astype(np.float16)
+        pca[:, li, :] = PCA(n_components=npca, random_state=0).fit_transform(x).astype(np.float16)
 
-    out_path = os.path.join(args.out, f"{name}_pca128.npz")
+    out_path = os.path.join(args.out, f"{name}_pca{npca}.npz")
     np.savez_compressed(
         out_path, pca=pca,
         obj_ids=np.asarray(obj_ids), pr_ids=np.asarray(pr_ids),
