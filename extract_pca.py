@@ -41,13 +41,13 @@ import numpy as np
 # Registry of the models compared in this project. Any of these -- or any other
 # HuggingFace causal LM via --hf-repo -- can be selected.
 MODELS = {
-    "qwen32b":      "Qwen/Qwen3-32B",
-    "qwen235b":     "Qwen/Qwen3-235B-A22B-Thinking-2507-FP8",
-    "gptoss120b":   "openai/gpt-oss-120b",
-    "llama70b":     "unsloth/Llama-3.3-70B-Instruct",
-    "mixtral8x22b": "mistralai/Mixtral-8x22B-Instruct-v0.1",
-    "mistrallarge": "mistralai/Mistral-Large-Instruct-2411",
-    "glm45air":     "zai-org/GLM-4.5-Air",
+    "qwen32b":          "Qwen/Qwen3-32B",
+    "qwen235b":         "Qwen/Qwen3-235B-A22B-Thinking-2507-FP8",
+    "gptoss120b":       "openai/gpt-oss-120b",
+    "llama33_70b":      "unsloth/Llama-3.3-70B-Instruct",
+    "mixtral8x22b":     "mistralai/Mixtral-8x22B-Instruct-v0.1",
+    "mistrallarge123b": "mistralai/Mistral-Large-Instruct-2411",
+    "glm45air":         "zai-org/GLM-4.5-Air",
 }
 
 

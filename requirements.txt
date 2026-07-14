@@ -1,4 +1,5 @@
 torch
 transformers>=5.11
 scikit-learn
+scipy
 numpy

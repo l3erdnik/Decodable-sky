@@ -5,11 +5,15 @@ their position on the sky**. Each object (a star, constellation, or deep-sky obj
 is labelled by a unit direction vector `(sin Dec, cos Dec sin RA, cos Dec cos RA)`, and
 we ask how linearly decodable that direction is from a model's residual stream.
 
-This repository currently contains the **feature-extraction** step: for a chosen model,
-it records the top-K PCA components of the last-token residual stream (per layer, K set
-with `--npca`, default 128), in pure autocomplete mode, over a grid of location-style
-prompts × objects. The compact per-model `.npz` files it produces are the input to the
-downstream probing / LDA analyses.
+The pipeline has two steps:
+
+* **`extract_pca.py`** — for a chosen model, record the top-K PCA components of the
+  last-token residual stream (per layer, K set with `--npca`, default 128), in pure
+  autocomplete mode, over a grid of location-style prompts × objects. Produces one
+  compact `<model>_pca128.npz` per model.
+* **`correlations.py`** — turn those `.npz` files into per-layer, per-direction
+  correlation / density tables that show *where* (which PCA directions, which layers)
+  the sky-direction (or object-type) signal lives.
 
 ## Install
 
@@ -21,6 +25,8 @@ pip install "kernels>=0.12,<0.13"
 
 ## Usage
 
+### 1. Extract PCA features
+
 ```bash
 # a model from the built-in registry
 python extract_pca.py --model qwen32b
@@ -29,7 +35,7 @@ python extract_pca.py --model qwen32b
 python extract_pca.py --model qwen32b --npca 64
 
 # multi-GPU sharding for large models
-CUDA_VISIBLE_DEVICES=0,1 python extract_pca.py --model mistrallarge --batch 16
+CUDA_VISIBLE_DEVICES=0,1 python extract_pca.py --model mistrallarge123b --batch 16
 
 # any other HuggingFace causal LM
 python extract_pca.py --hf-repo some/other-model --name mymodel
@@ -48,11 +54,34 @@ Output: `pca/<name>_pca<K>.npz` (where `K` is `--npca`) containing
 
 `n_samples = n_prompts × n_objects`.
 
+### 2. Correlation / density tables
+
+`correlations.py` reads a `<model>_pca128.npz` (always the 128-component file; `--npca`
+selects how many leading directions to use/show) and writes one per-layer table:
+
+```bash
+python correlations.py --model qwen235b --regime sky_cov_scaled --npca 128 \
+    --indir PCA128 --out correlations
+python correlations.py --model qwen235b --regime sky_r2 --npca 8
+```
+
+Output: `<out>/<model>_<regime>_<N>.csv`. The four regimes:
+
+| regime | target | PCA metric | columns |
+|---|---|---|---|
+| `sky_cov_scaled` | sky direction (whitened to Cov = I₃) | rescale each layer as a whole so PC-1 has variance 1 — keeps relative variances | `layer, trace, d1..dN` |
+| `sky_cov_equal` | sky direction (whitened) | whiten each PCA direction to variance 1 — per-direction squared canonical correlation | `layer, trace, d1..dN` |
+| `type_cov_equal` | object type (star +1 / constellation −1 / other 0, standardized) | whiten each PCA direction | `layer, trace, d1..dN` |
+| `sky_r2` | raw sky unit vector | first N directions, leave-one-object-out OLS (no ridge) | `layer, r2, angerr_deg` |
+
+For the density regimes `d_j = Σ_a Cov(w_j, target_a)²` on the (metric-transformed)
+PCA direction `j`; `trace` is their sum.
+
 ## Models
 
-The registry in `extract_pca.py` (`--model` keys): `qwen32b`, `qwen235b`, `gptoss120b`,
-`llama70b`, `mixtral8x22b`, `mistrallarge`, `glm45air`. Any other causal LM works via
-`--hf-repo`.
+The registry in `extract_pca.py` and `correlations.py` (`--model` keys): `qwen32b`,
+`qwen235b`, `gptoss120b`, `llama33_70b`, `mixtral8x22b`, `mistrallarge123b`, `glm45air`.
+`extract_pca.py` also accepts any other causal LM via `--hf-repo`.
 
 ## Data
 
