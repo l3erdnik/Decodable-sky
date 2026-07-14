@@ -1,0 +1,189 @@
+name,type,a_dec_deg,l_ra_deg,x_sinA,y_cosAsinL,z_cosAcosL,notes
+Sirius,star,-16.7161,101.2872,-0.28763,0.939218,-0.187455,Vmag=-1.45
+Canopus,star,-52.6957,95.988,-0.795428,0.602742,-0.063223,Vmag=-0.62
+Arcturus,star,19.1824,213.9153,0.328577,-0.526987,-0.783787,Vmag=-0.05
+Rigil Kentaurus,star,-60.834,219.9021,-0.873211,-0.312619,-0.37386,Vmag=-0.01
+Vega,star,38.7837,279.2347,0.626382,-0.769413,0.125096,Vmag=0.03
+Capella,star,45.998,79.1723,0.719315,0.682316,0.1305,Vmag=0.08
+Rigel,star,-8.2016,78.6345,-0.142657,0.970363,0.195052,Vmag=0.18
+Procyon,star,5.225,114.8255,0.091067,0.90382,-0.418111,Vmag=0.4
+Achernar,star,-57.2368,24.4285,-0.840914,0.223805,0.492722,Vmag=0.45
+Betelgeuse,star,7.4071,88.7929,0.128918,0.991435,0.02089,Vmag=0.45
+Hadar,star,-60.373,210.9559,-0.869262,-0.254283,-0.423938,Vmag=0.61
+Altair,star,8.8683,297.6958,0.154164,-0.874842,0.459221,Vmag=0.76
+Aldebaran,star,16.5093,68.9802,0.284171,0.894973,0.343904,Vmag=0.87
+Spica,star,-11.1613,201.2982,-0.193572,-0.356353,-0.91408,Vmag=0.98
+Antares,star,-26.432,247.3519,-0.445135,-0.826412,-0.344816,Vmag=1.06
+Pollux,star,28.0262,116.329,0.469875,0.79116,-0.391513,Vmag=1.16
+Fomalhaut,star,-29.6222,344.4127,-0.494279,-0.233587,0.837332,Vmag=1.17
+Deneb,star,45.2803,310.358,0.710558,-0.536182,0.455649,Vmag=1.25
+Mimosa,star,-59.6888,191.9303,-0.863297,-0.104331,-0.493795,Vmag=1.25
+Acrux,star,-63.0991,186.6496,-0.89179,-0.052392,-0.449405,Vmag=1.33
+Toliman,star,-60.8375,219.8961,-0.873241,-0.312545,-0.373852,Vmag=1.35
+Regulus,star,11.9672,152.093,0.207352,0.457866,-0.864502,Vmag=1.36
+Adhara,star,-28.9721,104.6565,-0.484383,0.846388,-0.221358,Vmag=1.5
+Gacrux,star,-57.1132,187.7915,-0.839745,-0.073611,-0.537968,Vmag=1.59
+Bellatrix,star,6.3497,81.2828,0.110597,0.982385,0.150628,Vmag=1.64
+Elnath,star,28.6075,81.573,0.478806,0.868442,0.128659,Vmag=1.65
+Miaplacidus,star,-69.7172,138.2999,-0.937993,0.230605,-0.258825,Vmag=1.67
+Alnilam,star,-1.2019,84.0534,-0.020976,0.9944,0.103579,Vmag=1.69
+Alnair,star,-46.961,332.0583,-0.730889,-0.3198,0.602934,Vmag=1.73
+Alnitak,star,-1.9426,85.1897,-0.033898,0.995905,0.083809,Vmag=1.74
+Alioth,star,55.9598,193.5073,0.828645,-0.130746,-0.544291,Vmag=1.76
+Kaus Australis,star,-34.3846,276.043,-0.564745,-0.820679,0.08688,Vmag=1.79
+Mirfak,star,49.8612,51.0807,0.764485,0.501552,0.40498,Vmag=1.79
+Dubhe,star,61.751,165.932,0.880899,0.115048,-0.459108,Vmag=1.81
+Wezen,star,-26.3932,107.0978,-0.444529,0.856175,-0.263359,Vmag=1.83
+Alkaid,star,49.3133,206.8852,0.758285,-0.294802,-0.58146,Vmag=1.85
+Avior,star,-59.5095,125.6285,-0.861713,0.412417,-0.295572,Vmag=1.86
+Sargas,star,-42.9978,264.3297,-0.681971,-0.727801,-0.072263,Vmag=1.86
+Menkalinan,star,44.9474,89.8822,0.706458,0.707754,0.001455,Vmag=1.9
+Atria,star,-69.0277,252.1662,-0.933754,-0.340718,-0.109614,Vmag=1.91
+Alhena,star,16.3993,99.428,0.282329,0.946359,-0.157143,Vmag=1.93
+Peacock,star,-56.7351,306.4119,-0.836143,-0.441425,0.325588,Vmag=1.94
+Castor,star,31.8883,113.6494,0.528265,0.777772,-0.340599,Vmag=1.98
+Mirzam,star,-17.9559,95.6749,-0.308285,0.946632,-0.094068,Vmag=1.98
+Alphard,star,-8.6586,141.8968,-0.150547,0.610046,-0.777933,Vmag=1.99
+Alsephina,star,-54.7088,131.1759,-0.816227,0.434854,-0.380363,Vmag=1.99
+Hamal,star,23.4624,31.7934,0.398147,0.483297,0.779681,Vmag=2.01
+Diphda,star,-17.9866,10.8974,-0.308795,0.179811,0.933977,Vmag=2.04
+Nunki,star,-26.2967,283.8164,-0.44302,-0.870572,0.214097,Vmag=2.05
+Menkent,star,-36.37,211.6706,-0.592997,-0.422761,-0.685294,Vmag=2.06
+Alpheratz,star,29.0904,2.0969,0.486189,0.031974,0.873268,Vmag=2.07
+Kochab,star,74.1555,222.6764,0.962006,-0.185073,-0.200728,Vmag=2.07
+Mirach,star,35.6206,17.433,0.582415,0.243535,0.775554,Vmag=2.07
+Saiph,star,-9.6696,86.9391,-0.167966,0.984386,0.052638,Vmag=2.07
+Rasalhague,star,12.56,263.7336,0.217462,-0.970237,-0.106539,Vmag=2.08
+Shaula,star,-37.1038,263.4022,-0.603261,-0.792262,-0.091637,Vmag=2.08
+Algol,star,40.9556,47.0422,0.655475,0.55271,0.51465,Vmag=2.09
+Almach,star,42.3297,30.9748,0.673396,0.38048,0.633856,Vmag=2.1
+Tiaki,star,-46.8846,340.6669,-0.729978,-0.22627,0.644929,Vmag=2.12
+Polaris,star,89.2641,37.9546,0.999918,0.007899,0.010127,Vmag=2.13
+Denebola,star,14.5721,177.2649,0.251597,0.046183,-0.966729,Vmag=2.14
+Aspidiske,star,-59.2752,139.2725,-0.859631,0.333352,-0.387182,Vmag=2.21
+Naos,star,-40.0031,120.896,-0.64283,0.657313,-0.393332,Vmag=2.21
+Alphecca,star,26.7147,233.672,0.449548,-0.719641,-0.529172,Vmag=2.22
+Mizar,star,54.9254,200.9814,0.818404,-0.20576,-0.536542,Vmag=2.23
+Sadr,star,40.2567,305.5571,0.646213,-0.620856,0.443786,Vmag=2.23
+Suhail,star,-43.4326,136.999,-0.687501,0.495265,-0.531088,Vmag=2.23
+Eltanin,star,51.4889,269.1515,0.782487,-0.622598,-0.00922,Vmag=2.24
+Schedar,star,56.5373,10.1268,0.834245,0.09695,0.542803,Vmag=2.24
+Mintaka,star,-0.2991,83.0017,-0.00522,0.992536,0.121839,Vmag=2.25
+Caph,star,59.1498,2.2945,0.858511,0.02053,0.512384,Vmag=2.28
+Dschubba,star,-22.6217,240.0834,-0.384645,-0.800068,-0.460369,Vmag=2.29
+Larawag,star,-34.2932,252.5409,-0.563428,-0.788104,-0.24787,Vmag=2.29
+Merak,star,56.3824,165.4603,0.832751,0.138993,-0.535916,Vmag=2.34
+Izar,star,27.0742,221.2468,0.455144,-0.587055,-0.669485,Vmag=2.35
+Enif,star,9.875,326.0465,0.171499,-0.550245,0.817201,Vmag=2.38
+Ankaa,star,-42.3061,6.5709,-0.673091,0.08463,0.734701,Vmag=2.4
+Phecda,star,53.6948,178.4577,0.805874,0.015936,-0.591872,Vmag=2.41
+Sabik,star,-15.7249,257.5945,-0.271019,-0.9401,-0.206788,Vmag=2.43
+Scheat,star,28.0828,345.9436,0.470747,-0.214283,0.855851,Vmag=2.44
+Alderamin,star,62.5856,319.6449,0.887699,-0.298135,0.350864,Vmag=2.45
+Aludra,star,-29.3031,111.0238,-0.48943,0.813992,-0.31285,Vmag=2.45
+Markeb,star,-55.0107,140.5284,-0.819259,0.364523,-0.442649,Vmag=2.47
+Aljanah,star,33.9703,311.5528,0.558762,-0.620623,0.550102,Vmag=2.48
+Markab,star,15.2053,346.1902,0.262278,-0.230343,0.937098,Vmag=2.49
+Pleiades,other,24.1139,56.6008,0.408552,0.762002,0.502432,
+Orion Nebula,other,-5.3876,83.8201,-0.093893,0.989797,0.107175,
+Crab Nebula,other,22.0174,83.6324,0.374888,0.921351,0.102819,
+Andromeda Galaxy,other,41.2688,10.6847,0.659592,0.139354,0.738593,
+Triangulum Galaxy,other,30.6602,23.4621,0.509945,0.342484,0.789088,
+Whirlpool Galaxy,other,47.1953,202.4696,0.733674,-0.259701,-0.627916,
+Hercules Cluster,other,36.4613,250.4235,0.59428,-0.757768,-0.269479,
+Ring Nebula,other,33.0291,283.3962,0.545065,-0.815582,0.194242,
+Sombrero Galaxy,other,-11.6231,189.9976,-0.201472,-0.170048,-0.964621,
+Beehive Cluster,other,19.6211,130.0542,0.335799,0.72099,-0.606145,
+Lagoon Nebula,other,-24.3867,270.9042,-0.412892,-0.910666,0.014372,
+Omega Centauri,other,-47.4795,201.697,-0.737035,-0.249862,-0.627971,
+Large Magellanic Cloud,other,-69.7561,80.8942,-0.938228,0.341656,0.05476,
+Carina Nebula,other,-59.6999,161.2593,-0.863395,0.162098,-0.477779,
+Tarantula Nebula,other,-69.1,84.675,-0.934204,0.355198,0.033107,
+Andromeda constellation,constellation,40.585,9.9171,0.650576,0.130793,0.748094,area-centroid (3410 pts)
+Antlia constellation,constellation,-34.0746,152.1618,-0.560271,0.386801,-0.732449,area-centroid (1121 pts)
+Apus constellation,constellation,-75.8603,244.4005,-0.969703,-0.220307,-0.105551,area-centroid (1029 pts)
+Aquarius constellation,constellation,-10.342,335.7954,-0.179524,-0.403336,0.897269,area-centroid (4772 pts)
+Aquila constellation,constellation,2.0733,294.6079,0.036177,-0.908583,0.416134,area-centroid (3201 pts)
+Ara constellation,constellation,-54.148,260.0653,-0.810532,-0.576911,-0.101047,area-centroid (1112 pts)
+Aries constellation,constellation,20.1469,39.8997,0.344428,0.602198,0.720227,area-centroid (2162 pts)
+Auriga constellation,constellation,40.9854,89.4127,0.655867,0.754837,0.007737,area-centroid (3196 pts)
+Bootes constellation,constellation,29.5299,218.9118,0.492878,-0.546529,-0.677035,area-centroid (4344 pts)
+Caelum constellation,constellation,-37.9378,71.3794,-0.614805,0.747394,0.251825,area-centroid (645 pts)
+Camelopardalis constellation,constellation,70.9022,85.2029,0.944961,0.326036,0.027361,area-centroid (3728 pts)
+Cancer constellation,constellation,19.1682,130.1312,0.328342,0.722182,-0.608807,area-centroid (2494 pts)
+Canes Venatici constellation,constellation,40.6236,197.2355,0.651087,-0.224892,-0.72492,area-centroid (2298 pts)
+Canis Major constellation,constellation,-22.0853,102.3607,-0.375986,0.905146,-0.198358,area-centroid (1883 pts)
+Canis Minor constellation,constellation,5.9256,114.4627,0.103238,0.905368,-0.411888,area-centroid (935 pts)
+Capricornus constellation,constellation,-18.7101,315.5164,-0.320781,-0.663676,0.675747,area-centroid (1957 pts)
+Carina constellation,constellation,-62.9611,131.627,-0.890698,0.339804,-0.301978,area-centroid (2433 pts)
+Cassiopeia constellation,constellation,62.3544,15.4873,0.885834,0.1239,0.447154,area-centroid (2798 pts)
+Centaurus constellation,constellation,-46.0204,196.5882,-0.719587,-0.198245,-0.665502,area-centroid (5285 pts)
+Cepheus constellation,constellation,72.053,334.8494,0.951342,-0.130958,0.278924,area-centroid (2807 pts)
+Cetus constellation,constellation,-9.1478,24.3336,-0.158982,0.406808,0.899573,area-centroid (5932 pts)
+Chamaeleon constellation,constellation,-80.1117,159.7019,-0.985144,0.059574,-0.161064,area-centroid (633 pts)
+Circinus constellation,constellation,-63.5441,221.7527,-0.895278,-0.296672,-0.332361,area-centroid (474 pts)
+Columba constellation,constellation,-35.574,86.5566,-0.581754,0.811896,0.048852,area-centroid (1271 pts)
+Coma Berenices constellation,constellation,22.517,191.1304,0.382957,-0.178327,-0.90639,area-centroid (1908 pts)
+Corona Australis constellation,constellation,-41.1414,279.4445,-0.657919,-0.742881,0.123576,area-centroid (642 pts)
+Corona Borealis constellation,constellation,32.3727,238.6205,0.535424,-0.721052,-0.439778,area-centroid (839 pts)
+Corvus constellation,constellation,-18.0775,186.2945,-0.310304,-0.104227,-0.944906,area-centroid (863 pts)
+Crater constellation,constellation,-15.8119,171.0784,-0.27248,0.149215,-0.950521,area-centroid (1368 pts)
+Crux constellation,constellation,-60.0778,186.5162,-0.866704,-0.056608,-0.495601,area-centroid (344 pts)
+Cygnus constellation,constellation,43.3749,309.2829,0.686769,-0.562623,0.460221,area-centroid (3930 pts)
+Delphinus constellation,constellation,12.3967,310.3768,0.21468,-0.744039,0.632707,area-centroid (895 pts)
+Dorado constellation,constellation,-61.4333,75.8216,-0.878261,0.463616,0.117127,area-centroid (870 pts)
+Draco constellation,constellation,68.2758,254.1947,0.928976,-0.356146,-0.100815,area-centroid (5305 pts)
+Equuleus constellation,constellation,7.5926,318.4497,0.132128,-0.657462,0.741812,area-centroid (305 pts)
+Eridanus constellation,constellation,-21.0343,56.9254,-0.358928,0.782124,0.509366,area-centroid (5522 pts)
+Fornax constellation,constellation,-31.6431,41.7019,-0.524626,0.566353,0.635619,area-centroid (1911 pts)
+Gemini constellation,constellation,23.5978,107.1727,0.400314,0.875525,-0.270564,area-centroid (2536 pts)
+Grus constellation,constellation,-45.4905,337.6536,-0.713134,-0.266535,0.648382,area-centroid (1761 pts)
+Hercules constellation,constellation,28.5278,259.7489,0.477585,-0.864561,-0.156356,area-centroid (5833 pts)
+Horologium constellation,constellation,-53.5501,49.1959,-0.804376,0.449718,0.388243,area-centroid (1227 pts)
+Hydra constellation,constellation,-19.028,156.387,-0.32603,0.378671,-0.866206,area-centroid (6255 pts)
+Hydrus constellation,constellation,-71.6719,35.9231,-0.949271,0.184493,0.25465,area-centroid (1193 pts)
+Indus constellation,constellation,-58.5573,322.0978,-0.853162,-0.320455,0.41161,area-centroid (1490 pts)
+Lacerta constellation,constellation,45.0779,337.4713,0.708068,-0.270557,0.652257,area-centroid (958 pts)
+Leo constellation,constellation,15.0944,160.4907,0.260411,0.322437,-0.910066,area-centroid (4616 pts)
+Leo Minor constellation,constellation,33.5628,155.3394,0.552851,0.347679,-0.757281,area-centroid (1146 pts)
+Lepus constellation,constellation,-19.1301,83.6571,-0.327714,0.938994,0.104377,area-centroid (1461 pts)
+Libra constellation,constellation,-15.4122,228.4629,-0.265761,-0.721609,-0.639259,area-centroid (2618 pts)
+Lupus constellation,constellation,-42.3451,229.9897,-0.673594,-0.566099,-0.475187,area-centroid (1589 pts)
+Lynx constellation,constellation,46.5734,121.2138,0.726256,0.587913,-0.356246,area-centroid (2652 pts)
+Lyra constellation,constellation,36.8206,282.5305,0.599312,-0.781448,0.173679,area-centroid (1402 pts)
+Mensa constellation,constellation,-77.5397,82.0325,-0.976446,0.213681,0.029907,area-centroid (730 pts)
+Microscopium constellation,constellation,-36.0388,314.7382,-0.588333,-0.574386,0.569162,area-centroid (1029 pts)
+Monoceros constellation,constellation,-2.5063,105.1232,-0.04373,0.964444,-0.260646,area-centroid (2282 pts)
+Musca constellation,constellation,-70.1703,188.1164,-0.940705,-0.047894,-0.335828,area-centroid (689 pts)
+Norma constellation,constellation,-51.5318,241.1306,-0.782953,-0.54477,-0.30035,area-centroid (822 pts)
+Octans constellation,constellation,-84.3651,318.9816,-0.995168,-0.064441,0.074083,area-centroid (1375 pts)
+Ophiuchus constellation,constellation,-5.2367,259.4576,-0.09127,-0.979017,-0.182199,area-centroid (4571 pts)
+Orion constellation,constellation,5.0787,83.9375,0.088524,0.990503,0.105199,area-centroid (2941 pts)
+Pavo constellation,constellation,-65.473,293.9052,-0.909766,-0.379512,0.168218,area-centroid (1861 pts)
+Pegasus constellation,constellation,19.5223,340.4692,0.334174,-0.315094,0.888281,area-centroid (5474 pts)
+Perseus constellation,constellation,44.3368,53.0741,0.698874,0.571776,0.429705,area-centroid (2965 pts)
+Phoenix constellation,constellation,-47.7203,11.6899,-0.739869,0.136309,0.658797,area-centroid (2330 pts)
+Pictor constellation,constellation,-52.4378,83.8139,-0.792692,0.606073,0.065691,area-centroid (1183 pts)
+Pisces constellation,constellation,10.9913,9.5293,0.19066,0.162515,0.96811,area-centroid (4218 pts)
+Piscis Austrinus constellation,constellation,-30.7517,334.0134,-0.511319,-0.376551,0.772504,area-centroid (1205 pts)
+Puppis constellation,constellation,-33.1626,114.9642,-0.547017,0.758911,-0.353309,area-centroid (3326 pts)
+Pyxis constellation,constellation,-28.338,133.5528,-0.474671,0.637889,-0.606452,area-centroid (1095 pts)
+Reticulum constellation,constellation,-60.7426,58.3294,-0.872433,0.415952,0.256602,area-centroid (540 pts)
+Sagitta constellation,constellation,18.7056,295.4757,0.320706,-0.855082,0.407409,area-centroid (418 pts)
+Sagittarius constellation,constellation,-27.8352,287.5476,-0.466931,-0.843145,0.266612,area-centroid (4236 pts)
+Scorpius constellation,constellation,-32.4352,251.724,-0.536346,-0.801424,-0.264673,area-centroid (2334 pts)
+Sculptor constellation,constellation,-32.1846,6.9828,-0.532649,0.102891,0.840059,area-centroid (2283 pts)
+Scutum constellation,constellation,-9.7694,280.0835,-0.169683,-0.970276,0.172545,area-centroid (519 pts)
+Serpens constellation,constellation,4.8814,247.4491,0.085093,-0.920189,-0.382113,area-centroid (3142 pts)
+Sextans constellation,constellation,-2.8741,154.3228,-0.050142,0.432756,-0.900116,area-centroid (1469 pts)
+Taurus constellation,constellation,17.0037,65.8153,0.292434,0.872352,0.39177,area-centroid (3876 pts)
+Telescopium constellation,constellation,-51.3835,290.0226,-0.781341,-0.586382,0.213688,area-centroid (1201 pts)
+Triangulum constellation,constellation,32.0293,32.3006,0.530352,0.453019,0.716589,area-centroid (653 pts)
+Triangulum Australe constellation,constellation,-65.9637,241.0739,-0.913288,-0.3565,-0.19701,area-centroid (517 pts)
+Tucana constellation,constellation,-64.533,357.8621,-0.902833,-0.016041,0.429692,area-centroid (1395 pts)
+Ursa Major constellation,constellation,54.5568,165.2067,0.814691,0.148066,-0.560674,area-centroid (6255 pts)
+Ursa Minor constellation,constellation,76.8523,225.9095,0.973787,-0.163373,-0.158267,area-centroid (1234 pts)
+Vela constellation,constellation,-48.0614,144.2857,-0.743861,0.390136,-0.542645,area-centroid (2354 pts)
+Virgo constellation,constellation,-2.7887,199.5151,-0.048653,-0.333659,-0.941438,area-centroid (6132 pts)
+Volans constellation,constellation,-69.5601,117.4288,-0.937039,0.309967,-0.160869,area-centroid (707 pts)
+Vulpecula constellation,constellation,24.887,304.6936,0.42083,-0.745857,0.516332,area-centroid (1280 pts)

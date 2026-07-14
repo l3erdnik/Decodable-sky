@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+pca128/
+*.npz
+.venv/
+.DS_Store
