@@ -14,6 +14,11 @@ The pipeline has two steps:
 * **`correlations.py`** — turn those `.npz` files into per-layer, per-direction
   correlation / density tables that show *where* (which PCA directions, which layers)
   the sky-direction (or object-type) signal lives.
+* **`extract_pca_gptoss_harmony.py`** — a gpt-oss-specific variant of the extractor.
+  gpt-oss is post-trained on the *harmony* format, so bare-text autocomplete is out of
+  distribution; this wraps each prompt in a minimal harmony conversation and seeds the
+  phrase into the assistant `final` channel (empty `analysis` channel before it). It
+  writes `gptoss120b_harmony_pca128.npz`, a drop-in for `correlations.py`.
 
 ## Install
 
