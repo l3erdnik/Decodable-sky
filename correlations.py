@@ -19,14 +19,14 @@ Regimes
                   density_j = corr(z_j, T)^2 ,  T = (star:+1, constellation:-1, other:0)
                   standardized to mean 0 / variance 1.
   sky_r2          first N PCA directions; leave-one-object-out OLS (no ridge) predicting
-                  the raw sky unit vector; per-layer R^2 and mean angular error.
+                  the raw sky unit vector; per-layer R^2, mean and median angular error.
 
 Sky target for the density regimes is whitened to Cov = I_3 so a perfect isometric
 fit puts unit mass on a direction; sky_r2 uses the raw unit vectors.
 
 Output: <out>/<model>_<regime>_<N>.csv
   sky_cov_scaled / sky_cov_equal / type_cov_equal :  layer, trace, d1..dN
-  sky_r2                                          :  layer, r2, angerr_deg
+  sky_r2                                          :  layer, r2, angerr_deg, angerr_median_deg
 """
 import argparse
 import csv
@@ -87,9 +87,10 @@ def sky_r2_table(pca, obj, yunit, n):
             pred[te] = LinearRegression().fit(z[~te], u[~te]).predict(z[te])
         r2 = r2_score(u, pred, multioutput="uniform_average")
         pn = pred / (np.linalg.norm(pred, axis=1, keepdims=True) + 1e-9)
-        ang = float(np.degrees(np.arccos(np.clip((pn * u).sum(1), -1, 1))).mean())
-        rows.append([L, round(float(r2), 6), round(ang, 4)])
-    return ["layer", "r2", "angerr_deg"], rows
+        ang = np.degrees(np.arccos(np.clip((pn * u).sum(1), -1, 1)))   # per-object error
+        rows.append([L, round(float(r2), 6),
+                     round(float(ang.mean()), 4), round(float(np.median(ang)), 4)])
+    return ["layer", "r2", "angerr_deg", "angerr_median_deg"], rows
 
 
 def main():

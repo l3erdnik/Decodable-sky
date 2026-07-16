@@ -80,7 +80,7 @@ Output: `<out>/<model>_<regime>_<N>.csv`. The four regimes:
 | `sky_cov_scaled` | sky direction (whitened to Cov = I₃) | rescale each layer as a whole so PC-1 has variance 1 — keeps relative variances | `layer, trace, d1..dN` |
 | `sky_cov_equal` | sky direction (whitened) | whiten each PCA direction to variance 1 — per-direction squared canonical correlation | `layer, trace, d1..dN` |
 | `type_cov_equal` | object type (star +1 / constellation −1 / other 0, standardized) | whiten each PCA direction | `layer, trace, d1..dN` |
-| `sky_r2` | raw sky unit vector | first N directions, leave-one-object-out OLS (no ridge) | `layer, r2, angerr_deg` |
+| `sky_r2` | raw sky unit vector | first N directions, leave-one-object-out OLS (no ridge) | `layer, r2, angerr_deg, angerr_median_deg` |
 
 For the density regimes `d_j = Σ_a Cov(w_j, target_a)²` on the (metric-transformed)
 PCA direction `j`; `trace` is their sum.
