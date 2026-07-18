@@ -1,0 +1,5 @@
+model,n,parsed,mean_err_all_deg,mean_err_parsed_deg,median_err_deg,pct_within_1deg
+qwen235b,100,99,2.15,1.26,0.0,89.0
+glm45air,100,100,1.83,1.83,0.0,89.0
+gptoss120b,100,91,11.91,4.19,0.0,73.0
+qwen32b,100,100,13.83,13.83,0.64,54.0

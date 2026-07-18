@@ -23,12 +23,18 @@ The pipeline has two steps:
   phrase into the assistant `final` channel (empty `analysis` channel before it). It
   writes `gptoss120b_harmony_pca128.npz`, a drop-in for `correlations.py`.
 
+Alongside the probing pipeline there is a **behavioural** counterpart — does a model
+*explicitly know* where things are? — in `radec_recall.py` / `radec_score.py` (see
+[Coordinate recall test](#coordinate-recall-test-behavioural) below).
+
 ## Install
 
 ```bash
 pip install -r requirements.txt
 # FP8 checkpoints (e.g. Qwen3-235B-*-FP8) additionally need:
 pip install "kernels>=0.12,<0.13"
+# the coordinate recall test (radec_recall.py) uses vLLM instead of transformers:
+pip install vllm
 ```
 
 ## Usage
@@ -84,6 +90,54 @@ Output: `<out>/<model>_<regime>_<N>.csv`. The four regimes:
 
 For the density regimes `d_j = Σ_a Cov(w_j, target_a)²` on the (metric-transformed)
 PCA direction `j`; `trace` is their sum.
+
+## Coordinate recall test (behavioural)
+
+A separate, behavioural probe: rather than decoding a *represented* direction, just
+ask each reasoning model what it explicitly knows. For every non-constellation object
+(85 stars + 15 deep-sky objects; constellations have no single RA/Dec) the model is
+prompted, in its own chat template with thinking/reasoning **on**:
+
+> Give the right ascension and declination of *X* with no commentary.
+
+Then the answer's RA/Dec is parsed and compared to the true J2000 position by
+great-circle angular error. Only the reasoning-capable models are used
+(`qwen32b`, `qwen235b`, `gptoss120b`, `glm45air`).
+
+```bash
+# 1. generate answers (one model at a time; uses vLLM)
+python radec_recall.py --model qwen32b        # -> recall/radec_answers_qwen32b.csv
+python radec_recall.py --model qwen235b       # tp=2; qwen32b/gptoss120b tp=1; glm45air tp=1
+
+# 2. parse + score every answer table in the folder
+python radec_score.py --indir recall --outdir recall
+```
+
+`radec_score.py` parses the many formats models emit (lettered `06h45m08.9s`,
+colon `06:45:08.9`, space-sexagesimal `06 45 08.9`, decimal degrees, and gpt-oss's
+harmony `final` channel). Answers with no committed coordinate — e.g. a model that
+reasons past its token budget without answering — are scored **90°** (a random guess
+on the sphere averages 90° away). Outputs, in `recall/`:
+
+| file | columns |
+|---|---|
+| `radec_answers_<model>.csv` | `name, type, true_ra_deg, true_dec_deg, answer` |
+| `radec_error_<model>.csv` | `… pred_ra_deg, pred_dec_deg, parsed, angular_error_deg` |
+| `radec_error_summary.csv` | one row per model (below) |
+
+Results over the 100 objects (mean° counts unparsed answers as 90°):
+
+| model | parsed | mean err (all) | mean err (parsed) | median | % ≤ 1° |
+|---|---|---|---|---|---|
+| `glm45air` | 100/100 | 1.83° | 1.83° | 0.0° | 89% |
+| `qwen235b` | 99/100 | 2.15° | 1.26° | 0.0° | 89% |
+| `gptoss120b` | 91/100 | 11.91° | 4.19° | 0.0° | 73% |
+| `qwen32b` | 100/100 | 13.83° | 13.83° | 0.6° | 54% |
+
+The large reasoning models place bright stars to within an arcminute. `qwen32b` is much
+weaker (it confidently misidentifies fainter stars); `gptoss120b`'s parsed answers are
+good, but on 9 obscure southern stars it overthinks past the 8192-token budget and never
+commits a final answer (scored 90°).
 
 ## Models
 
