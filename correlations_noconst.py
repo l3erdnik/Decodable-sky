@@ -29,10 +29,12 @@ Outputs per model (into --out):
                  these also equal the components of the radec joint fit.)
 
   <model>_noconst_skyxyz_cov_scaled_<N>.csv   sky_cov_scaled density on the subset
-  <model>_noconst_radec_cov_scaled_<N>.csv    PCA; 3-D sky / 2-D (RA,Dec) targets.
+  <model>_noconst_radec_cov_scaled_<N>.csv    PCA, one file per target: the 3-D sky
+  <model>_noconst_ra_cov_scaled_<N>.csv       unit vector, the 2-D (RA,Dec) pair, and
+  <model>_noconst_dec_cov_scaled_<N>.csv      RA and Dec each on their own (1-D).
      Whole-layer rescale by PC-1 std; density_j = sum_a Cov(w_j, target_a)^2 with
      the target whitened to Cov = I. On the subset-refit basis the trace is bounded
-     by the number of targets again (<=3 for xyz, <=2 for RA/Dec).
+     by the number of targets again (<=3 xyz, <=2 RA/Dec, <=1 RA-only / Dec-only).
 
 RA/Dec are read from data/astro_objects.csv (l_ra_deg, a_dec_deg) and joined to the
 .npz objects by name, so this stays correct regardless of row ordering.
@@ -161,14 +163,18 @@ def run_model(model, indir, objects, out, npca, ks):
     print(f"[{model}] kept {pca.shape[0]} samples / {int(np.unique(obj).size)} "
           f"non-constellation objects, {n_layers} layers; refit-PCA LOO on k={ks}", flush=True)
 
-    u_w = whiten_target(u)
-    rd_w = whiten_target(np.column_stack([ra_s, dec_s]))
+    dens_targets = {                                    # target whitened to Cov = I per density
+        "skyxyz": whiten_target(u),
+        "radec": whiten_target(np.column_stack([ra_s, dec_s])),
+        "ra": whiten_target(ra_s[:, None]),
+        "dec": whiten_target(dec_s[:, None]),
+    }
     r2_rows = {k: [] for k in ks}
-    dens_xyz, dens_rd = [], []
+    dens_rows = {tag: [] for tag in dens_targets}
     for L in range(n_layers):
         s = subset_pca(pca[:, L, :].astype(np.float64))  # subset-refit scores, this layer
-        dens_xyz.append(density_row(s, u_w, ndens, L))
-        dens_rd.append(density_row(s, rd_w, ndens, L))
+        for tag, tw in dens_targets.items():
+            dens_rows[tag].append(density_row(s, tw, ndens, L))
         for k in ks:
             r2_rows[k].append(r2_row(s[:, :k], obj, u, ra_s, dec_s, L))
 
@@ -178,8 +184,8 @@ def run_model(model, indir, objects, out, npca, ks):
     for k in ks:
         write_csv(os.path.join(out, f"{model}_noconst_r2_k{k}.csv"), r2_header, r2_rows[k])
     dens_header = ["layer", "trace"] + [f"d{j + 1}" for j in range(ndens)]
-    write_csv(os.path.join(out, f"{model}_noconst_skyxyz_cov_scaled_{ndens}.csv"), dens_header, dens_xyz)
-    write_csv(os.path.join(out, f"{model}_noconst_radec_cov_scaled_{ndens}.csv"), dens_header, dens_rd)
+    for tag, rows in dens_rows.items():
+        write_csv(os.path.join(out, f"{model}_noconst_{tag}_cov_scaled_{ndens}.csv"), dens_header, rows)
 
 
 def main():
