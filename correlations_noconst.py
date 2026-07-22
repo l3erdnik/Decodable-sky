@@ -13,28 +13,36 @@ subset: per layer it re-centers on the subset mean (the bias) and rotates the
 128 stored scores by the subset's own eigenvectors, giving components that are
 orthonormal and variance-ordered ON THE SUBSET. All tables below use that basis.
 
+The sky is parametrized two symmetric ways -- the 3-D unit vector (sinDec,
+cosDec sinRA, cosDec cosRA) and the 2-D (RA_deg, Dec_deg) pair -- each centered and
+whitened to Cov = I on the subset. Their direct sum is one common 5-D sky embedding;
+the xyz vs RA/Dec "models" are just its 3-D and 2-D components.
+
 Outputs per model (into --out):
 
-  <model>_noconst_r2_k<k>.csv     leave-one-object-out OLS on the top-k subset-PCA
-                                  subspace (k in --ks, default 4 and 8). Columns:
-     layer, xyz_r2, xyz_angerr_deg, xyz_angerr_med_deg,
-            radec_angerr_deg, radec_angerr_med_deg, ra_r2, dec_r2
-     * xyz_*   : joint 3-D fit of the sky unit vector (sinDec, cosDec sinRA,
-                 cosDec cosRA); R^2 (uniform over 3 outputs) + angular error.
-     * radec_* : joint fit of (RA_deg, Dec_deg); angular error of the unit vector
-                 rebuilt from the predicted (RA, Dec). RA fit raw -- the 0/360
-                 discontinuity is intentional.
-     * ra_r2 / dec_r2 : RA and Dec fit SEPARATELY as 1-D targets. (Under OLS the
-                 per-column fit of a joint (RA,Dec) regression is identical, so
-                 these also equal the components of the radec joint fit.)
+  <model>_noconst_commonality_k<k>.csv   commonality decomposition of how much of the
+                                  top-k subset-PCA subspace the sky embedding explains
+                                  (k in --ks, default 4, 8, 16). Leave-one-object-out
+                                  OLS predicts the k PC scores FROM the sky features;
+                                  R^2 is uniform-averaged over the k PC outputs.
+     layer, k, r2_full, r2_xyz, r2_radec, unique_xyz, unique_radec, shared
+     * r2_full  : predictors = the 5-D embedding (xyz + RA/Dec together).
+     * r2_xyz   : predictors = the 3-D whitened unit vector only.
+     * r2_radec : predictors = the 2-D whitened (RA, Dec) only. RA fit raw -- the
+                  0/360 discontinuity is intentional.
+     * commonality (Newton-Spurrell):
+          unique_xyz   = r2_full - r2_radec   (only the Cartesian encoding explains)
+          unique_radec = r2_full - r2_xyz     (only the RA/Dec encoding explains)
+          shared       = r2_xyz + r2_radec - r2_full   (<0 = suppression)
 
   <model>_noconst_skyxyz_cov_scaled_<N>.csv   sky_cov_scaled density on the subset
   <model>_noconst_radec_cov_scaled_<N>.csv    PCA, one file per target: the 3-D sky
   <model>_noconst_ra_cov_scaled_<N>.csv       unit vector, the 2-D (RA,Dec) pair, and
   <model>_noconst_dec_cov_scaled_<N>.csv      RA and Dec each on their own (1-D).
      Whole-layer rescale by PC-1 std; density_j = sum_a Cov(w_j, target_a)^2 with
-     the target whitened to Cov = I. On the subset-refit basis the trace is bounded
-     by the number of targets again (<=3 xyz, <=2 RA/Dec, <=1 RA-only / Dec-only).
+     the target whitened to Cov = I. On the subset-refit basis the trace (sum over
+     PC directions) is bounded by the number of targets: <=3 xyz, <=2 RA/Dec,
+     <=1 RA-only / Dec-only. run_model prints the max trace per target to verify.
 
 RA/Dec are read from data/astro_objects.csv (l_ra_deg, a_dec_deg) and joined to the
 .npz objects by name, so this stays correct regardless of row ordering.
@@ -86,12 +94,6 @@ def load_radec(path, names):
             np.array([dec[nm] for nm in names], np.float64))
 
 
-def radec_to_unit(ra_deg, dec_deg):
-    """(RA, Dec) in degrees -> unit vector (sinDec, cosDec sinRA, cosDec cosRA)."""
-    ra, dec = np.radians(ra_deg), np.radians(dec_deg)
-    return np.stack([np.sin(dec), np.cos(dec) * np.sin(ra), np.cos(dec) * np.cos(ra)], 1)
-
-
 def loo_predict(z, target, obj):
     """Leave-one-object-out OLS prediction of `target` (>=2-D) from `z`."""
     pred = np.zeros_like(target, dtype=np.float64)
@@ -101,28 +103,21 @@ def loo_predict(z, target, obj):
     return pred
 
 
-def _angerr(pred_unit, u):
-    """Per-object angular error (deg) between predicted and true unit vectors."""
-    pn = pred_unit / (np.linalg.norm(pred_unit, axis=1, keepdims=True) + 1e-9)
-    return np.degrees(np.arccos(np.clip((pn * u).sum(1), -1, 1)))
+def commonality_row(Y, obj, xxyz, xradec, L, k):
+    """Commonality decomposition of how well the sky embedding explains subspace `Y`.
 
-
-def r2_row(zk, obj, u, ra, dec, L):
-    """One layer row of the LOO R^2 table for the top-k subset-PCA subspace `zk`."""
-    # xyz: joint 3-D fit of the raw unit vector
-    pxyz = loo_predict(zk, u, obj)
-    r2_xyz = r2_score(u, pxyz, multioutput="uniform_average")
-    ang_x = _angerr(pxyz, u)
-    # (RA, Dec): joint fit, angular error from the rebuilt unit vector
-    prd = loo_predict(zk, np.column_stack([ra, dec]), obj)
-    ang_r = _angerr(radec_to_unit(prd[:, 0], prd[:, 1]), u)
-    # RA and Dec fit separately as 1-D targets
-    r2_ra = r2_score(ra, loo_predict(zk, ra[:, None], obj)[:, 0])
-    r2_dec = r2_score(dec, loo_predict(zk, dec[:, None], obj)[:, 0])
-    return [L, round(float(r2_xyz), 6),
-            round(float(ang_x.mean()), 4), round(float(np.median(ang_x)), 4),
-            round(float(ang_r.mean()), 4), round(float(np.median(ang_r)), 4),
-            round(float(r2_ra), 6), round(float(r2_dec), 6)]
+    `Y` is the top-k subset-PCA subspace (the dependent variable). Leave-one-object-out
+    OLS predicts it FROM the 3-D whitened xyz features, from the 2-D whitened (RA,Dec)
+    features, and from their 5-D union; R^2 is uniform-averaged over the k PC outputs.
+    """
+    xfull = np.column_stack([xxyz, xradec])
+    r2f = r2_score(Y, loo_predict(xfull, Y, obj), multioutput="uniform_average")
+    r2x = r2_score(Y, loo_predict(xxyz, Y, obj), multioutput="uniform_average")
+    r2r = r2_score(Y, loo_predict(xradec, Y, obj), multioutput="uniform_average")
+    return [L, k, round(float(r2f), 6), round(float(r2x), 6), round(float(r2r), 6),
+            round(float(r2f - r2r), 6),      # unique_xyz
+            round(float(r2f - r2x), 6),      # unique_radec
+            round(float(r2x + r2r - r2f), 6)]  # shared
 
 
 def density_row(s, tw, n, L):
@@ -169,20 +164,27 @@ def run_model(model, indir, objects, out, npca, ks):
         "ra": whiten_target(ra_s[:, None]),
         "dec": whiten_target(dec_s[:, None]),
     }
-    r2_rows = {k: [] for k in ks}
+    xxyz, xradec = dens_targets["skyxyz"], dens_targets["radec"]  # commonality predictors
+    comm_rows = {k: [] for k in ks}
     dens_rows = {tag: [] for tag in dens_targets}
     for L in range(n_layers):
         s = subset_pca(pca[:, L, :].astype(np.float64))  # subset-refit scores, this layer
         for tag, tw in dens_targets.items():
             dens_rows[tag].append(density_row(s, tw, ndens, L))
         for k in ks:
-            r2_rows[k].append(r2_row(s[:, :k], obj, u, ra_s, dec_s, L))
+            comm_rows[k].append(commonality_row(s[:, :k], obj, xxyz, xradec, L, k))
+
+    bounds = {"skyxyz": 3, "radec": 2, "ra": 1, "dec": 1}    # trace should not exceed dim
+    for tag, rows in dens_rows.items():
+        mx = max(r[1] for r in rows)
+        flag = "" if mx <= bounds[tag] + 1e-6 else "  !! EXCEEDS BOUND"
+        print(f"  density[{tag:>6}] max trace over layers = {mx:.4f}  (bound {bounds[tag]}){flag}", flush=True)
 
     os.makedirs(out, exist_ok=True)
-    r2_header = ["layer", "xyz_r2", "xyz_angerr_deg", "xyz_angerr_med_deg",
-                 "radec_angerr_deg", "radec_angerr_med_deg", "ra_r2", "dec_r2"]
+    comm_header = ["layer", "k", "r2_full", "r2_xyz", "r2_radec",
+                   "unique_xyz", "unique_radec", "shared"]
     for k in ks:
-        write_csv(os.path.join(out, f"{model}_noconst_r2_k{k}.csv"), r2_header, r2_rows[k])
+        write_csv(os.path.join(out, f"{model}_noconst_commonality_k{k}.csv"), comm_header, comm_rows[k])
     dens_header = ["layer", "trace"] + [f"d{j + 1}" for j in range(ndens)]
     for tag, rows in dens_rows.items():
         write_csv(os.path.join(out, f"{model}_noconst_{tag}_cov_scaled_{ndens}.csv"), dens_header, rows)
@@ -191,7 +193,7 @@ def run_model(model, indir, objects, out, npca, ks):
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--model", help="single model key (default: all 7)", choices=MODELS)
-    ap.add_argument("--ks", default="4,8", help="comma-separated PCA-subspace sizes for the LOO fit")
+    ap.add_argument("--ks", default="4,8,16", help="comma-separated top-k PC subspace sizes (commonality target)")
     ap.add_argument("--npca", type=int, default=128, help="components shown in the density tables")
     ap.add_argument("--indir", default="PCA128", help="folder holding <model>_pca128.npz")
     ap.add_argument("--objects", default="data/astro_objects.csv")
