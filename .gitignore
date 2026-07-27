@@ -5,3 +5,7 @@ pca128/
 *.npz
 .venv/
 .DS_Store
+
+# ...but DO track the bundled top-16 PCA features (see README "Bundled PCA features")
+!PCA128/
+!PCA128/*.npz
