@@ -2,8 +2,10 @@
 """
 Decodable Sky -- squared-distance RDM decomposition (equal-footing coordinates).
 
-Neural RDM = SQUARED Euclidean distance between per-object centroids in the whitened
-top-k subset-refit PCA space (non-constellation objects only). Because squared
+Neural RDM = SQUARED Euclidean distance between per-object centroids in the top-k
+subset-refit PCA space (non-constellation objects only), the space scaled AS A WHOLE
+so PC-1 has variance 1 (the sky_cov_scaled convention -- relative PC variances are
+preserved, so the dominant directions dominate the distances). Because squared
 distances are ADDITIVE over a direct sum of features, we regress the neural RDM onto
 the squared-distance RDM of each sky coordinate, every coordinate standardised to
 unit variance:
@@ -129,7 +131,7 @@ def run_model(model, indir, objects, out, k, nperm, show_gram, rng):
     rows, cache = [], {}
     for L in range(pca.shape[1]):
         s = subset_pca(pca[:, L, :].astype(np.float64))[:, :k]
-        s = s / (s.std(0) + 1e-12)                            # whiten top-k
+        s = s / (s[:, 0].std() + 1e-12)                       # scale whole space so PC-1 var=1
         C = np.array([s[obj == i].mean(0) for i in ids])
         yv = upper(squareform(pdist(C)) ** 2)                 # SQUARED distances
         cache[L] = yv
