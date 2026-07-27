@@ -116,6 +116,9 @@ def run_model(model, indir, objects, out, k):
     yunit = d["Yunit"].astype(np.float64)
     ra_o, dec_o = load_radec(objects, names)
 
+    if k > pca_all.shape[2]:                              # cropped PCA128 file (fewer comps)
+        print(f"[{model}] file has only {pca_all.shape[2]} PCA comps; using k={pca_all.shape[2]}", flush=True)
+        k = pca_all.shape[2]
     keep = (~np.isin(names, list(EXCLUDE)))[obj_all]      # drop the 11 seam/pole objects
     obj = obj_all[keep]
     u = yunit[obj]                                        # (N,3) raw unit vector

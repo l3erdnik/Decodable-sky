@@ -68,6 +68,24 @@ Output: `pca/<name>_pca<K>.npz` (where `K` is `--npca`) containing
 
 `n_samples = n_prompts × n_objects`.
 
+### Bundled PCA features (`PCA128/`)
+
+For convenience the repo ships the extracted features in `PCA128/<model>_pca128.npz`
+so the analysis scripts run without re-extracting (which needs the GPUs + weights). To
+keep the repo lightweight these bundled files are **cropped to the top-16 PCA
+components** (`pca` shape `(n_samples, n_layers, 16)`; ≈70 MB total instead of ≈540 MB).
+
+* Every analysis here uses `k ≤ 8`, so the crop is transparent; scripts clamp a larger
+  `--k` / `--npca` to the 16 available and print a note.
+* **Stored-basis** tables (`correlations.py`, `skyproj.py`, `pc_table.py`) read the
+  leading components directly, so their first-16 columns are **identical** to full-128.
+* **Subset-refit** analyses (`correlations_noconst.py`, `loo_projection_sweep.py`,
+  `geometry_vs_chart.py`, `rdm_decomp.py`) re-rotate the PCA on an object subset, which
+  mixes all available components, so their numbers shift **slightly** vs full-128
+  (≤ ~0.02 in R²; qualitative conclusions unchanged).
+* Need all 128 components? Regenerate with `extract_pca.py --out PCA128` (see above),
+  which overwrites `PCA128/<model>_pca128.npz` with the full file.
+
 ### 2. Correlation / density tables
 
 `correlations.py` reads a `<model>_pca128.npz` (always the 128-component file; `--npca`
