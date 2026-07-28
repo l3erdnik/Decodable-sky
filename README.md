@@ -140,8 +140,8 @@ python radial_length_correlations.py     # -> radial_corr/corr_summary.csv + <mo
 ```
 
 `radial_corr/corr_summary.csv` has one row per model: the chosen layer, kept/dropped
-counts, and the seven correlations — Spearman for distance (stars) and frequency (stars,
-constellations), Pearson for −Vmag (stars) and the star / constellation / other indicators
+counts, and the seven correlations — Spearman for distance (stars); Pearson for frequency
+(stars, constellations), −Vmag (stars) and the star / constellation / other indicators
 (all surviving objects) — each with its p-value and subset size.
 
 ## Coordinate recall test (behavioural)

@@ -18,8 +18,8 @@ For each model:
   4. Eliminate objects whose MSE_o exceeds 2x the across-object average MSE.
   5. Over the surviving objects, correlate meanlen_o with:
        (1) distance to object          Spearman, stars only (stars with a distance)
-       (2) text-corpus frequency (zipf) Spearman, stars only
-       (3) text-corpus frequency (zipf) Spearman, constellations only
+       (2) text-corpus frequency (zipf) Pearson,  stars only
+       (3) text-corpus frequency (zipf) Pearson,  constellations only
        (4) negative apparent magnitude  Pearson,  stars only
        (5) "constellation" indicator    Pearson,  all surviving
        (6) "star" indicator             Pearson,  all surviving
@@ -159,9 +159,9 @@ def main():
         is_const = ktype == "constellation"
         is_other = ktype == "other"
 
-        c1 = corr(spearmanr, kml[is_star],  kdist[is_star])   # distance, stars
-        c2 = corr(spearmanr, kml[is_star],  kzipf[is_star])   # zipf, stars
-        c3 = corr(spearmanr, kml[is_const], kzipf[is_const])  # zipf, constellations
+        c1 = corr(spearmanr, kml[is_star],  kdist[is_star])   # distance, stars (Spearman)
+        c2 = corr(pearsonr,  kml[is_star],  kzipf[is_star])   # zipf, stars (Pearson)
+        c3 = corr(pearsonr,  kml[is_const], kzipf[is_const])  # zipf, constellations (Pearson)
         c4 = corr(pearsonr,  kml[is_star], -kvmag[is_star])   # -Vmag, stars
         c5 = corr(pearsonr,  kml, is_const.astype(float))     # const indicator, all
         c6 = corr(pearsonr,  kml, is_star.astype(float))      # star indicator, all
@@ -172,8 +172,8 @@ def main():
             "n_total": n_obj, "n_kept": int(keep.sum()),
             "n_dropped": int((~keep).sum()),
             "dist_star_spearman_r": c1[0], "dist_star_p": c1[1], "dist_star_n": c1[2],
-            "zipf_star_spearman_r": c2[0], "zipf_star_p": c2[1], "zipf_star_n": c2[2],
-            "zipf_const_spearman_r": c3[0], "zipf_const_p": c3[1], "zipf_const_n": c3[2],
+            "zipf_star_pearson_r": c2[0], "zipf_star_p": c2[1], "zipf_star_n": c2[2],
+            "zipf_const_pearson_r": c3[0], "zipf_const_p": c3[1], "zipf_const_n": c3[2],
             "negVmag_star_pearson_r": c4[0], "negVmag_star_p": c4[1], "negVmag_star_n": c4[2],
             "const_ind_pearson_r": c5[0], "const_ind_p": c5[1], "const_ind_n": c5[2],
             "star_ind_pearson_r": c6[0], "star_ind_p": c6[1], "star_ind_n": c6[2],
