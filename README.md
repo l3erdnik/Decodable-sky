@@ -109,6 +109,41 @@ Output: `<out>/<model>_<regime>_<N>.csv`. The four regimes:
 For the density regimes `d_j = Σ_a Cov(w_j, target_a)²` on the (metric-transformed)
 PCA direction `j`; `trace` is their sum.
 
+### 3. Prediction-length correlations (radial analysis)
+
+What does the *magnitude* of the decoded sky vector track? First,
+`build_star_metadata.py` collects per-object metadata into `astro_metadata_full.csv`
+(`name, type, Vmag, distance_ly, zipf`): stellar distances from SIMBAD trigonometric
+parallax (`distance_ly = 3.261564 · 1000 / plx_mas`, each star resolved by name through
+the SIMBAD sim-script interface) and text-corpus frequency from `wordfreq` (the appended
+" constellation" tag is stripped so a constellation is scored by its real name). `Vmag`
+comes from the catalog's `notes`, with SIMBAD's V as a fallback.
+
+```bash
+pip install wordfreq                 # SIMBAD access itself uses only the stdlib
+python build_star_metadata.py        # data/astro_objects.csv -> astro_metadata_full.csv
+```
+
+Then `radial_length_correlations.py`, for every model with a `PCA128/<model>_pca128.npz`,
+picks the top-8 layer with the smallest **median** angular error (from
+`correlations/<model>_sky_r2_8.csv`), rebuilds the leave-one-object-out OLS sky prediction
+(exactly as in `correlations.py`'s `sky_r2_table`), drops objects whose mean-square angular
+error exceeds 2× the across-object average, and correlates each surviving object's **mean
+prediction-vector length** with distance, frequency, −Vmag, and the type indicators.
+
+```bash
+# prerequisite: the sky_r2 tables the layer choice reads
+for m in qwen32b qwen235b gptoss120b gptoss120b_harmony llama33_70b mixtral8x22b mistrallarge123b glm45air; do
+  python correlations.py --model $m --regime sky_r2 --npca 8
+done
+python radial_length_correlations.py     # -> radial_corr/corr_summary.csv + <model>_perobject.csv
+```
+
+`radial_corr/corr_summary.csv` has one row per model: the chosen layer, kept/dropped
+counts, and the seven correlations — Spearman for distance (stars) and frequency (stars,
+constellations), Pearson for −Vmag (stars) and the star / constellation / other indicators
+(all surviving objects) — each with its p-value and subset size.
+
 ## Coordinate recall test (behavioural)
 
 A separate, behavioural probe: rather than decoding a *represented* direction, just
